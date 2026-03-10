@@ -1,0 +1,33 @@
+# FUEL
+    no;fuelling_station;fuelling_date;registration
+    1;2026-03-01;2026-03-01;B999XXX
+    type;registration;fuelling_station;fuelling_date;quantity;price;net_value;tax_rate;total_value;
+
+    "supplier": "Fuel Merchant Name", -- MANDATORY
+    "description": "Description goes here", -- MANDATORY
+    "fuelling_station": "Park Service Station", -- MANDATORY
+    "fuelling_date": "2023-08-23 16:59:26", -- MANDATORY
+    "registration": "officia ex", -- MANDATORY
+    "quantity": 22.1, -- MANDATORY
+    "price": 1.23, -- MANDATORY
+    "net_value": 27.183, -- MANDATORY
+    "tax_rate": 0.15, -- MANDATORY
+    "total_value": 30.0105, -- MANDATORY
+
+    "id": 4351848,
+    "transaction_id": 20260300023,
+    "user_id": 2172523,
+    "employee_id": "MBT-024R",
+    "employee_name": "Aditya Hermawan ",
+    "reimbursement_id": 35700,
+    "reimbursement_name": "Operasional",
+    "request_date": "2026-02-27",
+    "approved_date": "",
+    "status": "pending",
+    "request_amount": 1351500,
+    "paid_amount": 1351500,
+    "description": "BBM, makan ,tol, hotel ",
+    "created_at": "2026-03-04 23:11:58"
+
+
+# TOLLS

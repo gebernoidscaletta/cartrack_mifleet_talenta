@@ -10,6 +10,7 @@ from data.request.updateToll import UpdateToll
 from data.response.responseFuel import ResponseFuel
 from data.response.responseToll import ResponseToll
 from data.response.responseReimburseData import ResponseReimburseData
+from enumeration.mifleetEnum import ModuleName
 from util import utilAuth
 from datetime import datetime, timedelta
 from constants.constantsGeneral import ConstantsGeneral
@@ -22,7 +23,7 @@ def servicesMifleetTalenta(currTime: str, endTime: str) -> bool:
     try:
         log.info("Starting to get data from Talenta")
         log.info(f"Current Time: {currTime}, End Time: {endTime}")
-        getReimbursementData : List[Dict[str, any]] = getDataFromTalenta(currTime, endTime)
+        getReimbursementData : List[Dict[str, Any]] = getDataFromTalenta(currTime, endTime)
         log.info(f"Data : {getReimbursementData}")
         
         listReimburseData : List[GetReimburseData] = [GetReimburseData(**item) for item in getReimbursementData]
@@ -30,12 +31,24 @@ def servicesMifleetTalenta(currTime: str, endTime: str) -> bool:
         for count, item in enumerate(listReimburseData):
             try :
                 logAllItems(count, item)
+                #TODO : add logic for check data for each sub module in cartrack mifleet (fuel and tolls) and map to each sub module in cartrack mifleet (fuel and tolls)
+                talentaResponse: GetReimburseData = parsingDataFromTalenta(item)
                 
-                
+                log.info(f"Sub-Module Status : Fuel")
+                if talentaResponse.module_name == ModuleName.FUEL:
+                    fuelRequest: UpdateFuel = mapDataToFuel(talentaResponse)
+                    responseFuel: ResponseFuel = servicesMifleetFuel(fuelRequest)
+                    log.info(f"Response Fuel : {responseFuel}")
+                elif talentaResponse.module_name == ModuleName.TOLL:
+                    tollRequest: UpdateToll = mapDataToToll(talentaResponse)
+                    responseToll: ResponseToll = servicesMifleetToll(tollRequest)
+                    log.info(f"Response Toll : {responseToll}")
+                else :
+                    log.error(f"Unknown Module Name : {talentaResponse.module_name}")
+
             except Exception as e:
                 log.error(f"Error Processing Item {count} with id {item.id} : {e}")
             
-        
     except Exception as e:
         log.error(f"Error Processing : {e}")
         return False
@@ -59,7 +72,7 @@ def getDataFromTalenta(currTime: str, endTime: str) -> bool:
     log.info(f"Successfully got data from Talenta with status code {response.status_code}")
     return response.json()["data"]
 
-def parsingDataFromTalenta():
+def parsingDataFromTalenta(response : GetReimburseData) -> GetReimburseData:
     a=a
     #TODO : parsing data from talenta and map to each sub module in cartrack Mifleet (fuel and tolls)
     
@@ -71,6 +84,7 @@ def mapDataToToll() -> UpdateToll:
     a=a
     #TODO : mapping data from talenta to toll module in cartrack mifleet
 
+#TODO : Is this required?
 def logAllItems (count, item):
     log.info(f"Item No : {count}")
     log.info(f"Id : {item.id} ")

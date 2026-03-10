@@ -17,6 +17,7 @@ def basicAuthGenerator():
 
 #hmac username="kYdPFVLoEp4NW8ct", algorithm="hmac-sha256", headers="date request-line", signature="BiqZvszr12BKOmosy+gdGCAnnF64Wt9O1zQTsJvDJrc="
 
+#TODO : check again for the generation of hmac header, is it correct to use the full url or just the path and query params, and also check for the request line format, is it correct to use HTTP/1.1 or should it be something else
 def hmacHeadersGenerator(url: str, method: str, hmac_username: str, hmac_secret: str) -> dict:
     log.info(f"{file}Generating HMAC Headers")
     parsedUrl = urlparse(url)
@@ -26,6 +27,7 @@ def hmacHeadersGenerator(url: str, method: str, hmac_username: str, hmac_secret:
     requestLine = f"{method} {path} HTTP/1.1"
     dateString = datetime.now(timezone.utc).strftime('%a, %d %b %Y %H:%M:%S GMT')
     signingString = f"date: {dateString}\n{requestLine}"
+    log.info(f"{file}signingString : {signingString}")
     digest = hmac.new(
         hmac_secret.encode('utf-8'),
         signingString.encode('utf-8'),

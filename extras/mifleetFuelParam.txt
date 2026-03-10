@@ -1,0 +1,24 @@
+[
+  {
+    "supplier": "Fuel Merchant Name", -- MANDATORY
+    "description": "Description goes here", -- MANDATORY
+    "fuelling_station": "Park Service Station", -- MANDATORY
+    "fuelling_date": "2023-08-23 16:59:26", -- MANDATORY
+    "registration": "officia ex", -- MANDATORY
+    "quantity": 22.1, -- MANDATORY
+    "price": 1.23, -- MANDATORY
+    "net_value": 27.183, -- MANDATORY
+    "tax_rate": 0.15, -- MANDATORY
+    "total_value": 30.0105, -- MANDATORY
+    "document_number": "CONCEPT-XXXXXX",
+    "document_type": "DOCUMENT_TYPE_INVOICE",
+    "document_status": "DOCUMENT_STATUS_PAID",
+    "fuel_transaction_type": "FUEL_TRANSACTION_TYPE_PRIVATE",
+    "is_tank_full": true,
+    "discount": 1.25,
+    "fuel_card": "1234567890",
+    "driver": "John Doe",
+    "odometer": 100101,
+    "general_ledger_code": 100101
+  }
+]

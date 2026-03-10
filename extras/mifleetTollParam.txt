@@ -1,0 +1,20 @@
+[
+  {
+    "supplier": "Tollway Inc.",
+    "description": "East Bridge Toll Charge",
+    "passage_name": "Main Street Toll Booth",
+    "toll_date": "2023-08-23T16:59:26",
+    "registration": "ABC123",
+    "quantity": 1,
+    "price": 4.45,
+    "net_value": 4.45,
+    "tax_rate": 0.2,
+    "total_value": 4.99,
+    "document_number": "CONCEPT-123456",
+    "document_type": "DOCUMENT_TYPE_INVOICE",
+    "document_status": "DOCUMENT_STATUS_PAID",
+    "discount": 0.35,
+    "driver": "John Doe",
+    "general_ledger_code": 54321
+  }
+]

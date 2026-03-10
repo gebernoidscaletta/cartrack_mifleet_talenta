@@ -1,0 +1,41 @@
+{
+"data": [
+    {
+        "id": 12345,
+        "document_number": "ACCIDENT-123456",
+        "document_type": "DOCUMENT_TYPE_INVOICE",
+        "document_status": "DOCUMENT_STATUS_PAID",
+        "supplier": "ABC Towing",
+        "description": "Service description",
+        "quantity": 1,
+        "price": 100,
+        "net_value": 100,
+        "tax_rate": 0.15,
+        "total_value": 115,
+        "driver": "John Doe",
+        "general_ledger_code": 100101,
+        "discount": 1.25,
+        "registration": "ABX123",
+        "vehicle_deleted": false,
+        "fuel_transaction_type": "FUEL_TRANSACTION_TYPE_PRIVATE",
+        "fuelling_date": "2023-01-01 12:00:00",
+        "fuelling_station": "Park Service Station",
+        "ct_fuel_station": "Park Service Station",
+        "ct_fuel_station_latitude": 40.712776,
+        "ct_fuel_station_longitude": -74.005974,
+        "ct_latitude": 40.713776,
+        "ct_longitude": -74.004974,
+        "consumption": 8.5,
+        "fuel_validation_status": "FUEL_VALIDATION_MANAGER_APPROVED",
+        "ct_odometer": 100101,
+        "ct_quantity": 50,
+        "is_tank_full": true,
+        "fuel_card": "1234567890",
+        "odometer": 100101
+    }
+],
+"meta": 
+    {
+    "message": "string"
+    }
+}

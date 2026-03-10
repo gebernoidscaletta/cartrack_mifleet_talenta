@@ -6,10 +6,12 @@ class GetReimburseData:
     start_request_date: str
     end_request_date: str
     page : int = 1
-    limit : int = 1000
+    limit : int = 100
     
-    def to_query_params(self) -> Dict[str, str]:
+    def toQueryParams(self) -> Dict[str, str]:
         return {
             "start_request_date": self.start_request_date,
-            "end_request_date": self.end_request_date
+            "end_request_date": self.end_request_date,
+            "page": str(self.page),
+            "limit": str(self.limit)
         }

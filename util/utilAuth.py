@@ -3,8 +3,12 @@ import hashlib
 import base64
 from datetime import datetime, timezone
 from urllib.parse import urlparse
+from util.utilLogger import Log
 
 from constants.constantsGeneral import ConstantsGeneral
+
+log = Log()
+file = "utilAuth - "
 
 def basicAuthGenerator():
     credentials = f"{ConstantsGeneral.getCartrackApiUsername()}:{ConstantsGeneral.getCartrackApiPassword()}"
@@ -14,6 +18,7 @@ def basicAuthGenerator():
 #hmac username="kYdPFVLoEp4NW8ct", algorithm="hmac-sha256", headers="date request-line", signature="BiqZvszr12BKOmosy+gdGCAnnF64Wt9O1zQTsJvDJrc="
 
 def hmacHeadersGenerator(url: str, method: str, hmac_username: str, hmac_secret: str) -> dict:
+    log.info(f"{file}Generating HMAC Headers")
     parsedUrl = urlparse(url)
     path = parsedUrl.path
     if parsedUrl.query:
@@ -27,12 +32,14 @@ def hmacHeadersGenerator(url: str, method: str, hmac_username: str, hmac_secret:
         hashlib.sha256
     ).digest()
     signature = base64.b64encode(digest).decode('utf-8')
+    log.info(f"{file}Generated HMAC Signature: {signature}")
     hmacHeader = (
         f'hmac username="{hmac_username}", '
         f'algorithm="hmac-sha256", '
         f'headers="date request-line", '
         f'signature="{signature}"'
     )
+    log.info(f"{file}Date: {dateString}")
     return {
         "Authorization": hmacHeader,
         "Date": dateString

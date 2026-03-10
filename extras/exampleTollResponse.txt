@@ -1,0 +1,35 @@
+{
+"data": [
+    {
+        "id": 12345,
+        "document_number": "ACCIDENT-123456",
+        "document_type": "DOCUMENT_TYPE_INVOICE",
+        "document_status": "DOCUMENT_STATUS_PAID",
+        "supplier": "ABC Towing",
+        "description": "Service description",
+        "quantity": 1,
+        "price": 100,
+        "net_value": 100,
+        "tax_rate": 0.15,
+        "total_value": 115,
+        "driver": "John Doe",
+        "registration": "ABX123",
+        "vehicle_deleted": false,
+        "ct_toll_station": "Downtown Toll Plaza",
+        "ct_toll_station_latitude": 40.7128,
+        "ct_toll_station_longitude": -74.006,
+        "ct_latitude": 40.713,
+        "ct_longitude": -74.0059,
+        "ct_odometer": 15000,
+        "general_ledger_code": 54321,
+        "discount": 0.35,
+        "toll_validation_status": "TOLL_VALIDATION_MANAGER_APPROVED",
+        "toll_date": "2023-01-01 12:00:00",
+        "passage_name": "Main Street Toll Booth"
+    }
+],
+"meta": 
+    {
+        "message": "string"
+    }
+}

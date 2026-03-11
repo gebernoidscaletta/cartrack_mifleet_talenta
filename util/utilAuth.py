@@ -2,9 +2,9 @@ import hmac
 import hashlib
 import base64
 from datetime import datetime, timezone
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlencode
 from util.utilLogger import Log
-
+from data.model.hmacHeadersData import HmacHeadersData
 from constants.constantsGeneral import ConstantsGeneral
 
 log = Log()
@@ -18,25 +18,29 @@ def basicAuthGenerator():
 #hmac username="kYdPFVLoEp4NW8ct", algorithm="hmac-sha256", headers="date request-line", signature="BiqZvszr12BKOmosy+gdGCAnnF64Wt9O1zQTsJvDJrc="
 
 #TODO : check again for the generation of hmac header, is it correct to use the full url or just the path and query params, and also check for the request line format, is it correct to use HTTP/1.1 or should it be something else
-def hmacHeadersGenerator(url: str, method: str, hmac_username: str, hmac_secret: str) -> dict:
+def hmacHeadersGenerator(data: HmacHeadersData) -> dict:
     log.info(f"{file}Generating HMAC Headers")
-    parsedUrl = urlparse(url)
+
+    parsedUrl = urlparse(data.url)
     path = parsedUrl.path
-    if parsedUrl.query:
-        path += '?' + parsedUrl.query
-    requestLine = f"{method} {path} HTTP/1.1"
+    if data.params:
+        query = urlencode(data.params)
+        path = f"{path}?{query}"
+
+    requestLine = f"{data.method} {path} HTTP/1.1"
     dateString = datetime.now(timezone.utc).strftime('%a, %d %b %Y %H:%M:%S GMT')
     signingString = f"date: {dateString}\n{requestLine}"
-    log.info(f"{file}signingString : {signingString}")
+    log.info(f"{file}signingString : {dateString} {requestLine}")
+
     digest = hmac.new(
-        hmac_secret.encode('utf-8'),
+        data.hmac_secret.encode('utf-8'),
         signingString.encode('utf-8'),
         hashlib.sha256
     ).digest()
     signature = base64.b64encode(digest).decode('utf-8')
     log.info(f"{file}Generated HMAC Signature: {signature}")
     hmacHeader = (
-        f'hmac username="{hmac_username}", '
+        f'hmac username="{data.hmac_username}", '
         f'algorithm="hmac-sha256", '
         f'headers="date request-line", '
         f'signature="{signature}"'
@@ -46,7 +50,6 @@ def hmacHeadersGenerator(url: str, method: str, hmac_username: str, hmac_secret:
         "Authorization": hmacHeader,
         "Date": dateString
     }
-    
 # const Header = require('postman-collection').Header;
 # const url = require('url');
 

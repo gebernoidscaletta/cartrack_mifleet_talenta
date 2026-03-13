@@ -14,4 +14,12 @@ class ConstantsEndpoint:
     @staticmethod
     def getTalentaReimbursementV3():
         return ConstantsEndpoint._TALENTA_REIMBURSEMENT_V3
+
+    class TALENTA:
+        REIMBURSEMENT_LIST = "v2/talenta/v2/reimbursement/list"
+        REIMBURSEMENT_V3 = "/v2/talenta/v3/reimbursement"
+
+    class MIFLEET:
+        FUEL = "/mifleet/fuel"
+        TOLL = "/mifleet/toll"
     

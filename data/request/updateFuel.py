@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 @dataclass
 class UpdateFuel:
-    supplier: str = "Pertamina"
+    supplier: str
     description: str
     fuelling_station: str
     fuelling_date: str

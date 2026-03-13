@@ -5,7 +5,7 @@ from typing import Dict
 class GetReimburseData:
     start_request_date: str
     end_request_date: str
-    page : int = 1
+    page : int 
     limit : int = 100
     
     def toQueryParams(self) -> Dict[str, str]:

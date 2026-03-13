@@ -6,6 +6,7 @@ from logging import log
 from typing import List, Tuple, Any, Dict
 
 from constants.constantsEndpoint import ConstantsEndpoint
+from data.model.hmacHeadersData import HmacHeadersData
 from data.request.getReimburseData import GetReimburseData
 from data.request.updateFuel import UpdateFuel
 from data.request.updateToll import UpdateToll
@@ -21,10 +22,14 @@ from util.utilLogger import Log
 log = Log()
 
 
-def servicesMifleetTalenta(currTime: str, endTime: str) -> bool:
+def servicesMifleetTalenta(currTime: str, endTime: str) -> bool | None:
     try:
         log.info("Starting to get data from Talenta")
         log.info(f"Current Time: {currTime}, End Time: {endTime}")
+
+        dataRaw = getDataFromTalenta(currTime, endTime)
+        log.info(f"Data : {dataRaw}")
+
         # getReimbursementData : List[Dict[str, Any]] = getDataFromTalenta(currTime, endTime)
         # log.info(f"Data : {getReimbursementData}")
         #
@@ -58,23 +63,48 @@ def servicesMifleetTalenta(currTime: str, endTime: str) -> bool:
 
 # TODO : Add logic for looping each pagination
 def getDataFromTalenta(currTime: str, endTime: str):
+    responseData = []
     params: GetReimburseData = GetReimburseData(
         start_request_date=currTime,
         end_request_date=endTime
     )
+    hmacData = HmacHeadersData(
+        url=f"{ConstantsGeneral.getTalentaProductionBaseUrl()}{ConstantsEndpoint.TALENTA.REIMBURSEMENT_V3}",
+        method="GET",
+        hmac_username=ConstantsGeneral.getTalentaHmacUsername(),
+        hmac_secret=ConstantsGeneral.getTalentaHmacSecret(),
+        params=params.toQueryParams()
+    )
+    currentPage = 1
+    while True:
+        params.page = currentPage
+        response = requests.get(
+            url=f"{ConstantsGeneral.getTalentaProductionBaseUrl()+ConstantsEndpoint.getTalentaReimbursementV3()}",
+            params=params.toQueryParams(),
+            headers=utilAuth.hmacHeadersGenerator(hmacData)
+        )
+        log.info(f"Request Full URL : {response.url}")
+        response.raise_for_status()
+        if response.status_code == 200:
+            body = response.json()
+            data = body.get("data", {})
 
-    response = requests.get(
-        url=f"{ConstantsGeneral.getTalentaProductionBaseUrl()+ConstantsEndpoint.getTalentaReimbursementV3()}",
-        params=params.toQueryParams(),
-        headers=utilAuth.hmacHeadersGenerator(
-            url=f"{ConstantsEndpoint.getTalentaReimbursementV3()+params.toQueryParams()}",
-            method="GET",
-            hmac_username=ConstantsGeneral.getTalentaHmacUsername(),
-            hmac_secret=ConstantsGeneral.getTalentaHmacSecret()
-            ))
-    response.raise_for_status()
-    log.info(f"Successfully got data from Talenta with status code {response.status_code}")
-    return response.json()["data"]
+            reimbursements = data.get("reimbursement", [])
+            pagination = data.get("pagination", {})
+
+            log.info(f"Current Page : {currentPage}")
+            log.info(f"Last Page : {pagination.get('last_page')}")
+
+            responseData.extend(reimbursements)
+
+            if currentPage >= pagination.get("last_page", 1):
+                log.info("All Data Successfully Fetched")
+                break
+
+            currentPage += 1
+
+    log.info(f"Successfully got data from Talenta")
+    return responseData
 
 
 def parsingDataFromTalenta(response: GetReimburseData) -> GetReimburseData:
@@ -111,13 +141,14 @@ def logAllItems(count, item):
 def scheduler():
     log.info("Scheduler started")
     startTime = datetime.now()
-    time.sleep(864000)
+    # time.sleep(864000)
 
     while True:
         endTime = datetime.now()
-        startTimeStr = startTime.strftime("%Y-%m-%d %H:%M:%S")
-        endTimeStr = endTime.strftime("%Y-%m-%d %H:%M:%S")
-
+        # startTimeStr = startTime.strftime("%Y-%m-%d")
+        # endTimeStr = endTime.strftime("%Y-%m-%d")
+        startTimeStr = "2026-03-01"
+        endTimeStr = "2026-03-10"
         isSuccess: bool = servicesMifleetTalenta(startTimeStr, endTimeStr)
         startTime = endTime if isSuccess else startTime
 
